@@ -26,11 +26,30 @@ class App extends Component {
         longitude:-38.497794,
         latitudeDelta: 0.015,
         longitudeDelta: 0.0121,
-      }
+      },
+      texto: ''
     };
 
     this.moverCidade = this.moverCidade.bind(this);
+    this.mudouMapa = this.mudouMapa.bind(this);
+    this.clicou = this.clicou.bind(this);
 
+  }
+
+  clicou(e){
+    alert('latitude clicada: ' + e.nativeEvent.coordinate.latitude + '\n logitude: ' +  e.nativeEvent.coordinate.longitude);
+  }
+
+  mudouMapa(region){
+      let state = this.state;
+      state.texto = region.latitude;
+      state.region = {
+        latitude: region.latitude,
+        longitude:region.longitude,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      }
+      this.setState(state);
   }
 
  moverCidade(lat,long){
@@ -47,7 +66,7 @@ class App extends Component {
  }
 
   render() {
-    const {region} = this.state;
+    const {region,texto} = this.state;
     return (
         <View style={styles.container}>
           <View style={{flexDirection:'row'}}>
@@ -56,7 +75,15 @@ class App extends Component {
             <Button title="Barbalho" onPress={() => {this.moverCidade(-12.958794, -38.494995)}} />
           </View>
         <Text>{region.latitude} | {region.longitude}</Text>
+        <Text>Latitude Atual</Text>
+        <Text>{texto}</Text>
         <MapView
+         /* onMapReady={() => {alert('Mapa Totalmente Carregado!')}}*/
+        /* onRegionChangeComplete = {this.mudouMapa}*/
+          onPress={this.clicou}
+          // mapType=standard | satellite | hybrid
+          showsTraffic={true}
+         
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
           region={region}

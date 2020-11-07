@@ -13,6 +13,8 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
+import Pin from './src/Pin';
+
 //-12.958927, -38.495056
 //-12.958916, -38.495704
 //-12.958794, -38.494995
@@ -32,7 +34,15 @@ class App extends Component {
       markers:[
         {key:0,coords:{latitude:-12.950385,longitude:-38.487950},pinColor:'#FF0000'},
         {key:1,coords:{latitude:-12.950730,longitude:-38.485976},pinColor:'#0000FF'},
-      ]
+      ],
+      cars:[
+        {key:0,image:require('./assets/carro.png'),coords:{latitude:-12.957493,longitude: -38.496548}},
+        {key:1,image:require('./assets/carro_left.png'),coords:{latitude:-12.957002,longitude:-38.494992}},
+      ], 
+      markersEstilizados:[
+        {key:0,aviso:"Cuidado",coords:{latitude:-12.957955,longitude:-38.492380},pinColor:'#FF0000'},
+        {key:1,aviso:"Tranquilo",coords:{latitude:-12.957673,longitude:-38.492938},pinColor:'#0000FF'},
+      ],
     };
 
     this.moverCidade = this.moverCidade.bind(this);
@@ -89,7 +99,7 @@ class App extends Component {
  }
 
   render() {
-    const {region,texto,markers} = this.state;
+    const {region,texto,markers,cars,markersEstilizados} = this.state;
     return (
         <View style={styles.container}>
           <View style={{flexDirection:'row'}}>
@@ -103,7 +113,7 @@ class App extends Component {
         <MapView
          /* onMapReady={() => {alert('Mapa Totalmente Carregado!')}}*/
         /* onRegionChangeComplete = {this.mudouMapa}*/
-          onPress={this.newMarker}
+         // onPress={this.newMarker}
           // mapType=standard | satellite | hybrid
           showsTraffic={true}
          
@@ -137,6 +147,32 @@ class App extends Component {
               );
             })}
 
+          {cars.map((car) => {
+              return(
+                <Marker key={car.key}
+                image={car.image}
+                coordinate={car.coords} 
+                title="Minha Casa"
+                description="Rua"
+               
+                 />
+              );
+            })} 
+
+
+          {markersEstilizados.map((marker) => {
+              return(
+                <Marker key={marker.key}
+                coordinate={marker.coords} 
+                title="Minha Casa"
+                description="Rua"
+                
+                >
+                  <Pin aviso={marker.aviso} corFundo={marker.pinColor}/>
+                </Marker>
+              );
+            })}
+
 
 
         </MapView>
@@ -157,6 +193,19 @@ const styles = StyleSheet.create({
     width:'100%',
     height:500
   },
+  viewMarker: {
+    height:30,
+    padding:5,
+    alignItems:"center",
+    justifyContent:"center",
+    borderRadius:5
+    
+  },
+
+  textoMarker: {
+    color:'#FFF'
+  }
+
  });
  
 
